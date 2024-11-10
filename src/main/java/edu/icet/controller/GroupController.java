@@ -16,11 +16,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
+@RequestMapping("/group")
 public class GroupController {
     final GroupServiceImpl groupService;
     final UserServiceImpl userService;
 
-    @PostMapping("/group")
+    @PostMapping()
     public ResponseEntity<String> add(@RequestBody Group group) {
         group.addMember(group.getAdmin());
         if (groupService.addGroup(group)) {
@@ -30,7 +32,7 @@ public class GroupController {
         }
     }
 
-    @PostMapping("/group/add-member")
+    @PostMapping("/add-member")
     public ResponseEntity<String> add(@RequestBody AddMember member) {
         if (addMember(member)) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Member added successfully.");
@@ -55,7 +57,7 @@ public class GroupController {
         return groupService.updateGroup(group);
     }
 
-    @DeleteMapping("/group/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         if (groupService.deleteGroup(id)) {
             return ResponseEntity.status(HttpStatus.OK).body("Group deleted successfully.");
@@ -64,7 +66,7 @@ public class GroupController {
         }
     }
 
-    @GetMapping("/group")
+    @GetMapping()
     public ResponseEntity<List<Group>> get() {
         List<Group>groups=groupService.getGroup();
         if (groups.isEmpty()) {
@@ -73,12 +75,32 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
-    @PutMapping("/group")
+    @PutMapping()
     public ResponseEntity<String> update(@RequestBody Group group){
         if (groupService.updateGroup(group)) {
             return ResponseEntity.status(HttpStatus.CREATED).body("Group updated successfully.");
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Unable to update Group data.");
         }
+    }
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<Group>> findByMemberId(@PathVariable Integer memberId) {
+        List<Group> groups = groupService.findByMemberId(memberId);
+
+        if (groups.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Group> findById(@PathVariable Integer id) {
+        Group group = groupService.findById(id);
+
+        if (group==null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.ok(group);
     }
 }

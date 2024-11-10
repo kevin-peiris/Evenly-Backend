@@ -18,4 +18,7 @@ public interface GroupService {
     boolean updateGroup(Group group);
 
     Group findById(Integer id);
+
+    List<Group> findByMemberId(Integer id);
+
 }

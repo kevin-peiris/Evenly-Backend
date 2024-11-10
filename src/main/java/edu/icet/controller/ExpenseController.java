@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class ExpenseController {
 
     final ExpenseService expenseService;
@@ -112,8 +113,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/expense/group/{groupId}")
-    public ResponseEntity<List<Expense>> getExpensesByGroup(@PathVariable Integer groupId) {
-        List<Expense> expenses = expenseService.getExpensesByGroup(groupId);
+    public ResponseEntity<List<ExpenseResponse>> getExpensesByGroup(@PathVariable Integer groupId) {
+        List<ExpenseResponse> expenses = expenseService.getExpensesByGroup(groupId);
         return new ResponseEntity<>(expenses, HttpStatus.OK);
     }
 

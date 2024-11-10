@@ -86,4 +86,16 @@ public class GroupServiceImpl implements GroupService {
             return null;
         }
     }
+
+    @Override
+    public List<Group> findByMemberId(Integer id) {
+        List<GroupEntity> entityList = repository.findByMemberId(id);
+        List<Group> groupList = new ArrayList<>();
+
+        for (GroupEntity entity : entityList) {
+            groupList.add(new ModelMapper().map(entity, Group.class));
+        }
+        return groupList;
+    }
+
 }

@@ -1,5 +1,6 @@
 package edu.icet.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import edu.icet.util.ExpenseUserType;
 import lombok.Data;
 

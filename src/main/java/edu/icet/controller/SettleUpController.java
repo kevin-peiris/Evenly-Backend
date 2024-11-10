@@ -11,17 +11,22 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/settleup")
+@CrossOrigin
 public class SettleUpController {
 
     final ExpenseService expenseService;
     final GroupService groupService;
     final UserService userService;
 
-    @PostMapping("/group/{groupId}/user/{userId}")
-    public ResponseEntity<String> settleUpExpenses(@PathVariable Integer groupId, @PathVariable Integer userId) {
-        expenseService.settleUpExpenses(groupId, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Expenses settled successfully for user in group");
+    @PostMapping("/expense/{expenseId}/user/{userId}")
+    public ResponseEntity<String> settleUpExpenses(@PathVariable Integer expenseId, @PathVariable Integer userId) {
+        boolean isSettled = expenseService.settleUpExpenseByUserId(expenseId, userId);
+
+        if (isSettled) {
+            return ResponseEntity.status(HttpStatus.OK).body("Expense settled successfully for user with ID: " + userId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Expense or user not found, or an error occurred while settling.");
+        }
     }
-
-
 }
