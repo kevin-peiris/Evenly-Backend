@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
 
-    final ExpenseRepository repository;
+    private final ExpenseRepository repository;
+    private final ModelMapper mapper;
 
     @Override
     public boolean addExpense(Expense expense) {
@@ -41,6 +42,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseEntity mapToEntity(Expense expense) {
         ExpenseEntity expenseEntity = new ExpenseEntity();
         expenseEntity.setDescription(expense.getDescription());
+        expenseEntity.setDate(expense.getDate());
         expenseEntity.setAmount(expense.getAmount());
         expenseEntity.setGroup(new ModelMapper().map(expense.getGroup(), GroupEntity.class));
         expenseEntity.setCreatedById(new ModelMapper().map(expense.getCreatedById(), UserEntity.class));
@@ -64,7 +66,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         List<Expense> expenseList = new ArrayList<>();
 
         for (ExpenseEntity entity : entityList) {
-            expenseList.add(new ModelMapper().map(entity, Expense.class));
+            expenseList.add(mapper.map(entity, Expense.class));
         }
         return expenseList;
     }
@@ -82,7 +84,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public boolean updateExpense(Expense expense) {
         try {
-            ExpenseEntity entity = new ModelMapper().map(expense, ExpenseEntity.class);
+            ExpenseEntity entity = mapper.map(expense, ExpenseEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -124,6 +126,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             ExpenseResponse expenseResponse = new ExpenseResponse();
             expenseResponse.setId(entity.getId());
             expenseResponse.setDescription(entity.getDescription());
+            expenseResponse.setDate(entity.getDate());
             expenseResponse.setAmount(entity.getAmount());
             expenseResponse.setGroupId(entity.getGroup().getId()); // Extract only group ID
             expenseResponse.setCreatedById(entity.getCreatedById().getId()); // Extract only user ID

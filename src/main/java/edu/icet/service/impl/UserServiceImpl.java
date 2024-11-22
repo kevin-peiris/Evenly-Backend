@@ -18,12 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    final UserRepository repository;
+    private final UserRepository repository;
+    private final ModelMapper mapper;
 
     @Override
     public boolean registerUser(User user) {
         try {
-            UserEntity entity = new ModelMapper().map(user, UserEntity.class);
+            UserEntity entity = mapper.map(user, UserEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
         List<User> userList = new ArrayList<>();
 
         for (UserEntity entity : entityList) {
-            userList.add(new ModelMapper().map(entity, User.class));
+            userList.add(mapper.map(entity, User.class));
         }
         return userList;
     }
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
         List<User> userList = new ArrayList<>();
 
         for (UserEntity entity : entityList) {
-            userList.add(new ModelMapper().map(entity, User.class));
+            userList.add(mapper.map(entity, User.class));
         }
         return userList;
     }
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUser(User user) {
         try {
-            UserEntity entity = new ModelMapper().map(user, UserEntity.class);
+            UserEntity entity = mapper.map(user, UserEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
         try {
             Optional<UserEntity> entity = repository.findById(id);
             if (entity!=null) {
-                User user = new ModelMapper().map(entity, User.class);
+                User user = mapper.map(entity, User.class);
                 return user;
             }
             return null;
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
         try {
             Optional<UserEntity> entity = repository.findByEmail(email);
             if (entity!=null) {
-                User user = new ModelMapper().map(entity, User.class);
+                User user = mapper.map(entity, User.class);
                 return user;
             }
             return null;
@@ -107,9 +108,9 @@ public class UserServiceImpl implements UserService {
         try {
             Optional<UserEntity> entity = repository.findByEmail(email);
             if (entity!=null) {
-                User user = new ModelMapper().map(entity, User.class);
+                User user = mapper.map(entity, User.class);
                 user.setPassword(newPassword);
-                repository.save(new ModelMapper().map(user, UserEntity.class));
+                repository.save(mapper.map(user, UserEntity.class));
                 return true;
             }
         } catch (Exception e) {

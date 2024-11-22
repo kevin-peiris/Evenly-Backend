@@ -17,12 +17,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
-    final GroupRepository repository;
+    private final GroupRepository repository;
+    private final ModelMapper mapper;
 
     @Override
     public boolean addGroup(Group group) {
         try {
-            GroupEntity entity = new ModelMapper().map(group, GroupEntity.class);
+            GroupEntity entity = mapper.map(group, GroupEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -36,7 +37,7 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groupList = new ArrayList<>();
 
         for (GroupEntity entity : entityList) {
-            groupList.add(new ModelMapper().map(entity, Group.class));
+            groupList.add(mapper.map(entity, Group.class));
         }
         return groupList;
     }
@@ -47,7 +48,7 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groupList = new ArrayList<>();
 
         for (GroupEntity entity : entityList) {
-            groupList.add(new ModelMapper().map(entity, Group.class));
+            groupList.add(mapper.map(entity, Group.class));
         }
         return groupList;
     }
@@ -65,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public boolean updateGroup(Group group) {
         try {
-            GroupEntity entity = new ModelMapper().map(group, GroupEntity.class);
+            GroupEntity entity = mapper.map(group, GroupEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -78,7 +79,7 @@ public class GroupServiceImpl implements GroupService {
         try {
             Optional<GroupEntity> entity = repository.findById(id);
             if (entity!=null) {
-                Group group = new ModelMapper().map(entity, Group.class);
+                Group group = mapper.map(entity, Group.class);
                 return group;
             }
             return null;
@@ -93,7 +94,7 @@ public class GroupServiceImpl implements GroupService {
         List<Group> groupList = new ArrayList<>();
 
         for (GroupEntity entity : entityList) {
-            groupList.add(new ModelMapper().map(entity, Group.class));
+            groupList.add(mapper.map(entity, Group.class));
         }
         return groupList;
     }

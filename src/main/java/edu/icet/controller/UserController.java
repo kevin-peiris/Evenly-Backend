@@ -102,7 +102,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public ResponseEntity<String> update(@RequestBody User user) {
         if (service.updateUser(user)) {
             return ResponseEntity.status(HttpStatus.OK).body("User updated successfully.");

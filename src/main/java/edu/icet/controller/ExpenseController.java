@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class ExpenseController {
         Expense expense = new Expense(
                 null,
                 addExpense.getDescription(),
+                LocalDateTime.now().now(),
                 expenseUsers,
                 groupService.findById(addExpense.getGroupId()),
                 addExpense.getAmount(),

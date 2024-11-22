@@ -18,12 +18,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseUserServiceImpl implements ExpenseUserService {
 
-    final ExpenseUserRepository repository;
+    private final ExpenseUserRepository repository;
+    private final ModelMapper mapper;
 
     @Override
     public boolean addExpenseUser(ExpenseUser expenseUser) {
         try {
-            ExpenseUserEntity entity = new ModelMapper().map(expenseUser, ExpenseUserEntity.class);
+            ExpenseUserEntity entity = mapper.map(expenseUser, ExpenseUserEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
@@ -37,7 +38,7 @@ public class ExpenseUserServiceImpl implements ExpenseUserService {
         List<ExpenseUser> expenseUserList = new ArrayList<>();
 
         for (ExpenseUserEntity entity : entityList) {
-            expenseUserList.add(new ModelMapper().map(entity, ExpenseUser.class));
+            expenseUserList.add(mapper.map(entity, ExpenseUser.class));
         }
         return expenseUserList;
     }
@@ -55,7 +56,7 @@ public class ExpenseUserServiceImpl implements ExpenseUserService {
     @Override
     public boolean updateExpenseUser(ExpenseUser expenseUser) {
         try {
-            ExpenseUserEntity entity = new ModelMapper().map(expenseUser, ExpenseUserEntity.class);
+            ExpenseUserEntity entity = mapper.map(expenseUser, ExpenseUserEntity.class);
             repository.save(entity);
             return true;
         } catch (Exception e) {
